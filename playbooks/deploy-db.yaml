@@ -1,0 +1,40 @@
+---
+- name: Provision DB Server
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ vault_aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ vault_aws_secret_key }}"
+  vars:
+    csp: "aws"
+    env: "dev"
+    type: db
+    region: "us-east-1"
+    instances: 1
+    image_id: "ami-0ecb62995f68bb549"
+    instance_type: "t2.micro"
+    db_name: "{{ db_name }}"
+  roles:
+    - { role: "{{csp}}_provision" }
+    # - { role: "mysql_setup" }
+
+
+- name: Configure DB
+  hosts: group_type_db
+  # connection: local
+  gather_facts: no
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ vault_aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ vault_aws_secret_key }}"
+  vars:
+    csp: "aws"
+    env: "dev"
+    type: db
+    region: "us-east-1"
+    instances: 1
+    image_id: "ami-0ecb62995f68bb549"
+    instance_type: "t2.micro"
+    # db_name: "{{ db_name }}"
+  roles:
+    - { role: "mysql_setup" }

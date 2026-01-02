@@ -1,0 +1,25 @@
+---
+- name: print the web server ip
+  ansible.builtin.debug:
+    var: public_ip_addresses
+
+- name: update security group
+  amazon.aws.ec2_security_group:
+    name: "{{ type }}-sg"
+    description: "security group created using ansible"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 3306
+        to_port: 3306
+        cidr_ip: "{{ item }}/32"
+    tags:
+      Name: "{{ type }}-sg"
+  loop: "{{ public_ip_addresses | list }}"

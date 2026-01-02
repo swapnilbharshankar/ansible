@@ -1,0 +1,25 @@
+- name: Update apt cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 # Optional: update cache if older than 1 hour
+
+- name: Install Nginx and PHP-MySQL
+  become: true
+  ansible.builtin.apt:
+    name: ['nginx', 'php-fpm', 'php-mysql']
+    state: present
+
+- name: ansible remove default html
+  become: true
+  ansible.builtin.file:
+    path: /var/www/html/index.nginx-debian.html
+    state: absent
+
+- name: Deploy index.php template
+  become: true
+  template:
+    src: index.php.j2
+    dest: /var/www/html/index.php
+  notify: restart nginx
+

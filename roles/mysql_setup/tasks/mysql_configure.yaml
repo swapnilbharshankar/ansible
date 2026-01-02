@@ -1,0 +1,27 @@
+---
+- name: create db
+  become: true
+  community.mysql.mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ db_pass }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    config_file: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+- name: create mysql user
+  become: true
+  community.mysql.mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    host: "%" # Allows connection from any host, change to 'localhost' if only local access is needed
+    priv: "{{ db_name }}.*:ALL,GRANT"
+    state: present
+    login_user: root
+    login_password: "{{ db_pass }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    config_file: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+
+
+#     # login_unix_socket: /var/run/mysqld/mysqld.sock

@@ -1,0 +1,32 @@
+---
+# - name: check group is exists
+#   amazon.aws.ec2_security_group_info:
+#     filters:
+#       "tag:Name": "{{ type }}-sg"
+#   register: sg_result
+
+# - name: debug the ansible register.
+#   ansible.builtin.debug:
+#     var: sg_result.security_groups[0].group_name
+
+- name: create security group
+  amazon.aws.ec2_security_group:
+    name: "{{ type }}-sg"
+    description: "security group created using ansible"
+    tags:
+      Name: "{{ type }}-sg"
+      Env: "{{ env }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 3306
+        to_port: 3306
+        cidr_ip: 0.0.0.0/0
+  # when: sg_result.security_groups[0].group_name is not defined

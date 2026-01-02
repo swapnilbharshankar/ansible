@@ -1,0 +1,34 @@
+---
+- name: install mysql server
+  import_tasks: mysql_install.yaml
+
+- name: configure mysql server
+  import_tasks: mysql_configure.yaml
+
+# - name: install mysql
+#   ansible.builtin.apt:
+#     name: mysql-server
+#     state: present
+#     update_cache: yes
+
+# - name: configure mysql to listen on all ips.
+#   lineinfile:
+#     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+#     regexp: '^bind-address'
+#     line: 'bind-address = 0.0.0.0'
+#     notify: restart mysql
+  
+# - name: create db
+#   mysql_db:
+#     name: "{{ db_name }}"
+#     state: present
+#     login_unix_socket: /var/run/mysqld/mysqld.sock
+
+# - name: create mysql user
+#   mysql_user:
+#     name: "{{ db_user }}"
+#     password: "{{ db_pass }}"
+#     priv: "{{ db_name }}.*:ALL"
+#     host: "%" # Allows connection from Web Server
+#     state: present
+#     login_unix_socket: /var/run/mysqld/mysqld.sock

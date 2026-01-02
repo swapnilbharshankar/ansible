@@ -1,0 +1,7 @@
+---
+- name: Teardown AWS Environment
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - aws_cleanup

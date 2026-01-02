@@ -1,0 +1,24 @@
+- name: Terminate EC2 instances by tags
+  amazon.aws.ec2_instance:
+    access_key: "{{ vault_aws_access_key }}"
+    secret_key: "{{ vault_aws_secret_key }}"
+    region: "us-east-1"
+    filters:
+      "tag:Type": "{{ item }}"
+      instance-state-name: [ "running", "pending", "stopped" ]
+    state: absent
+    wait: yes
+  loop:
+    - web
+    - db
+
+- name: Delete Security Group
+  amazon.aws.ec2_security_group:
+    access_key: "{{ vault_aws_access_key }}"
+    secret_key: "{{ vault_aws_secret_key }}"
+    region: "us-east-1"
+    name: "{{ item }}-sg"
+    state: absent
+  loop:
+    - web
+    - db

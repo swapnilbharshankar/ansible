@@ -1,0 +1,6 @@
+env: "dev"
+type: web
+region: "us-east-1"
+instances: 1
+image_id: "ami-0ecb62995f68bb549"
+instance_type: "t2.micro"

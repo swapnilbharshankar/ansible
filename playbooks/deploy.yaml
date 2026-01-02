@@ -1,0 +1,26 @@
+---
+# Step 1: Provision
+- name: Provision Infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ vault_aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ vault_aws_secret_key }}"
+  vars:
+    csp: "aws"
+  roles:
+    - { role: "{{csp}}_provision" }
+
+# # Step 2: Refresh Inventory so new IPs are available
+# - name: Refresh Inventory
+#   hosts: localhost
+#   tasks:
+#     - meta: refresh_inventory
+
+# Step 3: Setup Mysql
+- name: setup mysql
+  hosts: group_type_db
+  become: yes
+  roles:
+    - mysql_setup
